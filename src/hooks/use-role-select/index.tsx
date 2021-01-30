@@ -1,21 +1,20 @@
 import React, { FunctionComponent, useCallback, useState } from 'react'
-import { RoleSelectProps } from './types'
-import { BE, FE } from './constants'
+import { RoleSelectProps } from '../../types'
+import { BE, FE } from '../../constants'
+import styles from './styles.module.css'
 
 const RoleSelect: FunctionComponent<RoleSelectProps> = ({
     children,
     value,
     onChange,
 }) => (
-    <section>
-        <label>
-            {children}
-            <select value={value} onChange={onChange}>
-                <option value={BE}>Бэкендер</option>
-                <option value={FE}>Фронтендер</option>
-            </select>
-        </label>
-    </section>
+    <label>
+        {children}
+        <select className={styles.select} value={value} onChange={onChange}>
+            <option value={BE}>Бэкендер</option>
+            <option value={FE}>Фронтендер</option>
+        </select>
+    </label>
 )
 
 export const useRoleSelect = (

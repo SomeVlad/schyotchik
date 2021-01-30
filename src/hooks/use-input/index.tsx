@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import styles from './styles.module.css'
 
 export const useInput = (
     defaultValue: number,
@@ -15,17 +16,16 @@ export const useInput = (
     )
 
     const Component = (
-        <section>
-            <label>
-                {label}
-                <input
-                    type='number'
-                    min={0}
-                    value={value}
-                    onChange={handleChange}
-                />
-            </label>
-        </section>
+        <label>
+            {label}
+            <input
+                className={styles.input}
+                type='number'
+                min={0}
+                value={value}
+                onChange={handleChange}
+            />
+        </label>
     )
 
     return [value, Component]

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FunctionComponent, useEffect, useState } from 'react'
 import {
     BE,
     FE,
@@ -6,9 +6,13 @@ import {
     FE_CAPACITY_DAILY,
     WORK_DAYS_IN_SPRINT,
 } from './constants'
-import { useRoleSelect } from './use-role-select'
-import { useInput } from './use-input'
-// import styles from './App.module.css'
+import { useRoleSelect } from './hooks/use-role-select'
+import { useInput } from './hooks/use-input'
+import styles from './App.module.css'
+
+const Section: FunctionComponent = ({ children }) => (
+    <section className={styles.section}>{children}</section>
+)
 
 const calcSpAmount = (
     workersAmount: number,
@@ -36,7 +40,7 @@ const calcSpAmount = (
         workDaysAmount -= 5
     }
 
-    return Math.max(dailyCapacity * workDaysAmount, 0)
+    return Math.max(Math.floor(dailyCapacity * workDaysAmount), 0)
 }
 
 export const App = () => {
@@ -99,22 +103,17 @@ export const App = () => {
     ])
 
     return (
-        <>
+        <div className={styles.wrapper}>
             <header>
                 <h1>Щёччик</h1>
             </header>
             <main>
-                {BeDevsAmountInput}
-
-                {FeDevsAmountInput}
-
-                {LastWeekRoleSelect}
-
-                {SprintFirstWeekRoleSelect}
-
-                {SprintSecondWeekRoleSelect}
-
-                {HolidaysInput}
+                <Section>{BeDevsAmountInput}</Section>
+                <Section>{FeDevsAmountInput}</Section>
+                <Section>{LastWeekRoleSelect}</Section>
+                <Section>{SprintFirstWeekRoleSelect}</Section>
+                <Section>{SprintSecondWeekRoleSelect}</Section>
+                <Section>{HolidaysInput}</Section>
 
                 <hr />
 
@@ -127,6 +126,6 @@ export const App = () => {
                     </div>
                 </section>
             </main>
-        </>
+        </div>
     )
 }
