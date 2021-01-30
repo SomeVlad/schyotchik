@@ -7,7 +7,7 @@ import {
     WORK_DAYS_IN_SPRINT,
 } from './constants'
 import { useRoleSelect } from './use-role-select'
-import { useDevsAmount } from './use-devs-amount'
+import { useInput } from './use-input'
 // import styles from './App.module.css'
 
 const calcSpAmount = (
@@ -15,9 +15,10 @@ const calcSpAmount = (
     isLastWeekDutyRole: boolean,
     isFirstWeekDutyRole: boolean,
     isSecondWeekDutyRole: boolean,
-    dailyCapacity: number
+    dailyCapacity: number,
+    holidays: number
 ) => {
-    let workDaysAmount = WORK_DAYS_IN_SPRINT * workersAmount
+    let workDaysAmount = (WORK_DAYS_IN_SPRINT - holidays) * workersAmount
 
     if (isLastWeekDutyRole) {
         // duty day off
@@ -42,8 +43,15 @@ export const App = () => {
     const [feSpAmount, setFeSpAmount] = useState(0)
     const [beSpAmount, setBeSpAmount] = useState(0)
 
-    const [feDevsAmount, FeDevsAmountInput] = useDevsAmount(0, 'фронтенд')
-    const [beDevsAmount, BeDevsAmountInput] = useDevsAmount(0, 'бэкенд')
+    const [feDevsAmount, FeDevsAmountInput] = useInput(
+        0,
+        'Сколько будет фронтенд-разработчиков?'
+    )
+    const [beDevsAmount, BeDevsAmountInput] = useInput(
+        0,
+        'Сколько будет бэкенд-разработчиков?'
+    )
+    const [holidays, HolidaysInput] = useInput(0, 'Сколько будет праздников?')
 
     const [lastWeekDuty, LastWeekRoleSelect] = useRoleSelect(
         BE,
@@ -66,7 +74,8 @@ export const App = () => {
             lastWeekDuty === FE,
             sprintFirstWeekDuty === FE,
             sprintSecondWeekDuty === FE,
-            FE_CAPACITY_DAILY
+            FE_CAPACITY_DAILY,
+            holidays
         )
 
         const beSpAmount = calcSpAmount(
@@ -74,7 +83,8 @@ export const App = () => {
             lastWeekDuty === BE,
             sprintFirstWeekDuty === BE,
             sprintSecondWeekDuty === BE,
-            BE_CAPACITY_DAILY
+            BE_CAPACITY_DAILY,
+            holidays
         )
 
         setFeSpAmount(feSpAmount)
@@ -82,6 +92,7 @@ export const App = () => {
     }, [
         beDevsAmount,
         feDevsAmount,
+        holidays,
         lastWeekDuty,
         sprintFirstWeekDuty,
         sprintSecondWeekDuty,
@@ -102,6 +113,8 @@ export const App = () => {
                 {SprintFirstWeekRoleSelect}
 
                 {SprintSecondWeekRoleSelect}
+
+                {HolidaysInput}
 
                 <hr />
 
