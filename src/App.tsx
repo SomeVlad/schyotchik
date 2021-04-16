@@ -1,47 +1,13 @@
-import React, { FunctionComponent, useEffect, useState } from 'react'
-import {
-    BE,
-    FE,
-    BE_CAPACITY_DAILY,
-    FE_CAPACITY_DAILY,
-    WORK_DAYS_IN_SPRINT,
-} from './constants'
+import React, { useEffect, useState } from 'react'
+import { BE, FE, DAILY_CAPACITY } from './constants'
 import { useRoleSelect } from './hooks/use-role-select'
 import { useInput } from './hooks/use-input'
+
+import { Section } from './components/Section'
+
+import { calcSpAmount } from './helpers/calc-sp-amount'
+
 import styles from './App.module.css'
-
-const Section: FunctionComponent = ({ children }) => (
-    <section className={styles.section}>{children}</section>
-)
-
-const calcSpAmount = (
-    workersAmount: number,
-    isLastWeekDutyRole: boolean,
-    isFirstWeekDutyRole: boolean,
-    isSecondWeekDutyRole: boolean,
-    dailyCapacity: number,
-    holidays: number
-) => {
-    let workDaysAmount = (WORK_DAYS_IN_SPRINT - holidays) * workersAmount
-
-    if (isLastWeekDutyRole) {
-        // duty day off
-        workDaysAmount--
-    }
-
-    if (isFirstWeekDutyRole) {
-        // duty
-        workDaysAmount -= 5
-        // duty day off
-        workDaysAmount--
-    }
-
-    if (isSecondWeekDutyRole) {
-        workDaysAmount -= 5
-    }
-
-    return Math.max(Math.floor(dailyCapacity * workDaysAmount), 0)
-}
 
 export const App = () => {
     const [feSpAmount, setFeSpAmount] = useState(0)
@@ -78,7 +44,7 @@ export const App = () => {
             lastWeekDuty === FE,
             sprintFirstWeekDuty === FE,
             sprintSecondWeekDuty === FE,
-            FE_CAPACITY_DAILY,
+            DAILY_CAPACITY,
             holidays
         )
 
@@ -87,7 +53,7 @@ export const App = () => {
             lastWeekDuty === BE,
             sprintFirstWeekDuty === BE,
             sprintSecondWeekDuty === BE,
-            BE_CAPACITY_DAILY,
+            DAILY_CAPACITY,
             holidays
         )
 
